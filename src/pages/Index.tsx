@@ -8,6 +8,8 @@ import { Progress } from '@/components/ui/progress';
 import RandomQuestionPicker from '@/components/RandomQuestionPicker';
 import GameCard from '@/components/GameCard';
 import { ultimateData } from '@/data/ultimateData'; // Adjust the import path as necessary
+import { useAuth0 } from "@auth0/auth0-react";
+import ProtectedRoute from "@/components/ProtectedRoute";
 
 const TopicCard = React.lazy(() => import('@/components/TopicCard'));
 
@@ -16,7 +18,7 @@ const Index = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [progress, setProgress] = useState<Record<string, Record<number, boolean>>>({});
   const [codeFont, setCodeFont] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { loginWithRedirect, logout, isAuthenticated, isLoading, user } = useAuth0();
 
   useEffect(() => {
     // Load theme preference
@@ -38,10 +40,6 @@ const Index = () => {
     if (savedProgress) {
       setProgress(JSON.parse(savedProgress));
     }
-
-    // Check login status
-    const loginStatus = localStorage.getItem('isLoggedIn');
-    setIsLoggedIn(loginStatus === 'true');
   }, []);
 
   const toggleTheme = () => {
@@ -64,17 +62,6 @@ const Index = () => {
       document.documentElement.style.fontFamily = '';
       localStorage.setItem('codeFont', 'false');
     }
-  };
-
-  const handleLogin = () => {
-    // Placeholder login functionality
-    setIsLoggedIn(true);
-    localStorage.setItem('isLoggedIn', 'true');
-  };
-
-  const handleLogout = () => {
-    setIsLoggedIn(false);
-    localStorage.setItem('isLoggedIn', 'false');
   };
 
   // Helper to flatten questions for a topic
@@ -127,31 +114,26 @@ const Index = () => {
             </div>
             
             <div className="flex items-center space-x-3">
-              {isLoggedIn ? (
-                <div className="flex items-center space-x-3">
+              {!isAuthenticated ? (
+                <Button onClick={() => loginWithRedirect()} className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 hover:scale-105 transition-all duration-300" size="sm">
+                  <LogIn className="w-4 h-4 mr-2" />
+                  Login
+                </Button>
+              ) : (
+                <>
                   <Badge className="bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300">
-                    Logged In
+                    {user?.name || user?.email || "Logged In"}
                   </Badge>
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={handleLogout}
+                    onClick={() => logout({ logoutParams: { returnTo: window.location.origin } })}
                     className="hover:scale-105 transition-transform"
                   >
                     Logout
                   </Button>
-                </div>
-              ) : (
-                <Button
-                  onClick={handleLogin}
-                  className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 hover:scale-105 transition-all duration-300"
-                  size="sm"
-                >
-                  <LogIn className="w-4 h-4 mr-2" />
-                  Login
-                </Button>
+                </>
               )}
-              
               <Button
                 variant="ghost"
                 size="icon"
@@ -289,20 +271,22 @@ const Index = () => {
           </div>
 
           {/* Time Pass Section */}
-          <div className="border-t border-gray-200/50 dark:border-gray-700/50 pt-12 animate-fade-in">
-            <div className="text-center mb-8">
-              <h3 className="text-3xl font-bold text-gray-900 dark:text-white mb-3">
-                Need a Break? 🎮
-              </h3>
-              <p className="text-xl text-gray-600 dark:text-gray-400">
-                Take a quick gaming break to refresh your mind
-              </p>
+          <ProtectedRoute>
+            <div className="border-t border-gray-200/50 dark:border-gray-700/50 pt-12 animate-fade-in">
+              <div className="text-center mb-8">
+                <h3 className="text-3xl font-bold text-gray-900 dark:text-white mb-3">
+                  Need a Break? 🎮
+                </h3>
+                <p className="text-xl text-gray-600 dark:text-gray-400">
+                  Take a quick gaming break to refresh your mind
+                </p>
+              </div>
+              
+              <div className="max-w-md mx-auto">
+                <GameCard />
+              </div>
             </div>
-            
-            <div className="max-w-md mx-auto">
-              <GameCard />
-            </div>
-          </div>
+          </ProtectedRoute>
 
           {/* Footer */}
           <footer className="mt-20 text-center text-gray-600 dark:text-gray-400">
