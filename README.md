@@ -26,6 +26,9 @@ A2Z DSA Tracker is a modern, open-source web application designed to help you ma
 
 ---
 
+## Deployment
+[![Netlify Status](https://api.netlify.com/api/v1/badges/ed9c76e8-8661-4a9d-b9dc-067bf40eda75/deploy-status)](https://app.netlify.com/projects/a2z-dsa-tracker/deploys)
+
 ## Getting Started
 
 ### Prerequisites
@@ -36,8 +39,8 @@ A2Z DSA Tracker is a modern, open-source web application designed to help you ma
 
 ```bash
 # Clone the repository
-git clone https://github.com/nileshkr17/dsa-confidence-booster.git
-cd dsa-confidence-booster
+git clone https://github.com/nileshkr17/A2Z-DSA-Tracker.git
+cd A2Z-DSA-Tracke
 
 # Install dependencies
 pnpm install # or npm install or yarn install
