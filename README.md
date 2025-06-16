@@ -40,7 +40,7 @@ A2Z DSA Tracker is a modern, open-source web application designed to help you ma
 ```bash
 # Clone the repository
 git clone https://github.com/nileshkr17/A2Z-DSA-Tracker.git
-cd A2Z-DSA-Tracke
+cd A2Z-DSA-Tracker
 
 # Install dependencies
 pnpm install # or npm install or yarn install
