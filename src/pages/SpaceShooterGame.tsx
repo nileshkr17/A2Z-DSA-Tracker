@@ -216,6 +216,10 @@ const SpaceShooterGame = () => {
 		<div
 			className='relative mx-auto bg-black'
 			style={{ width: gameWidth, height: gameHeight }}>
+
+			{/* Background */}
+			<div className='absolute inset-0 bg-gradient-to-b from-purple-900 to-black'></div>
+=======
 			{/* Stars background */}
 			<div className='absolute inset-0 bg-gradient-to-b from-purple-900 to-black'>
 				{Array.from({ length: 50 }).map((_, i) => (
@@ -230,6 +234,7 @@ const SpaceShooterGame = () => {
 					/>
 				))}
 			</div>
+
 
 			{/* Player */}
 			<div
